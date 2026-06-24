@@ -93,4 +93,18 @@ final class TheoryTests: XCTestCase {
         XCTAssertEqual(PitchClass.c.transposed(by: -1), .b)
         XCTAssertEqual(PitchClass.c.transposed(by: 12), .c)
     }
+
+    // MARK: Serialization
+
+    func testPitchClassFromName() {
+        XCTAssertEqual(PitchClass(name: "C"), .c)
+        XCTAssertEqual(PitchClass(name: "F#"), .fSharp)
+        XCTAssertNil(PitchClass(name: "H"))
+    }
+
+    func testPitchClassEncodesAsName() throws {
+        let data = try JSONEncoder().encode([PitchClass.a, .fSharp])
+        XCTAssertEqual(String(data: data, encoding: .utf8), "[\"A\",\"F#\"]")
+        XCTAssertEqual(try JSONDecoder().decode([PitchClass].self, from: data), [.a, .fSharp])
+    }
 }

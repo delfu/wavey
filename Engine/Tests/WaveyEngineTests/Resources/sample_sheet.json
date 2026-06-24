@@ -1,0 +1,12 @@
+{
+  "title": "Sample Progression",
+  "bpm": 100,
+  "duration": 8.0,
+  "events": [
+    { "time": 0.0, "duration": 2.0, "chord": { "root": "C", "quality": "maj" } },
+    { "time": 2.0, "duration": 2.0, "chord": { "root": "G", "quality": "maj" } },
+    { "time": 4.0, "duration": 2.0, "chord": { "root": "A", "quality": "min" } },
+    { "time": 6.0, "duration": 1.5, "chord": { "root": "F", "quality": "maj" } },
+    { "time": 7.5, "duration": 0.5, "note": { "pitchClass": "E", "octave": 4 } }
+  ]
+}

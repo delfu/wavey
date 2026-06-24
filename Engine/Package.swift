@@ -14,7 +14,8 @@ let package = Package(
         .target(name: "WaveyEngine"),
         .testTarget(
             name: "WaveyEngineTests",
-            dependencies: ["WaveyEngine"]
+            dependencies: ["WaveyEngine"],
+            resources: [.copy("Resources")]
         ),
     ],
     // Swift 5 mode for now — revisit Swift 6 strict concurrency once the

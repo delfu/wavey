@@ -40,3 +40,30 @@ public enum PitchClass: Int, CaseIterable, Codable, Hashable, Sendable {
         PitchClass(rawValue: ((rawValue + semitones) % 12 + 12) % 12)!
     }
 }
+
+public extension PitchClass {
+    /// Inverse of ``name`` — e.g. "C#" → `.cSharp`. Returns nil for unknown names.
+    init?(name: String) {
+        guard let match = Self.allCases.first(where: { $0.name == name }) else { return nil }
+        self = match
+    }
+}
+
+// Serialized as the note name ("C", "F#") so sheets stay hand-authorable.
+extension PitchClass {
+    public init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let name = try container.decode(String.self)
+        guard let pitchClass = PitchClass(name: name) else {
+            throw DecodingError.dataCorruptedError(
+                in: container, debugDescription: "unknown pitch class \"\(name)\""
+            )
+        }
+        self = pitchClass
+    }
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(name)
+    }
+}
