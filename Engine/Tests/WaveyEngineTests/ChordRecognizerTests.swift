@@ -60,4 +60,22 @@ final class ChordRecognizerTests: XCTestCase {
         // the brief F# is shorter than minChordDuration → absorbed into its C neighbours.
         XCTAssertEqual(recognizer.recognize(signal).map(\.chord), [Chord(root: .c, quality: .major)])
     }
+
+    func testEstimatesKeyFromPrimaryTriads() {
+        var chroma = [Double](repeating: 0, count: 12)
+        for triad in [[7, 11, 2], [0, 4, 7], [2, 6, 9]] {   // G, C, D = I/IV/V of G major
+            for pc in triad { chroma[pc] += 1 }
+        }
+        let key = ChordRecognizer.estimateKey(chroma)
+        XCTAssertEqual(key.root, .g)
+        XCTAssertTrue(key.isMajor)
+    }
+
+    func testDiatonicChordsOfGMajor() {
+        XCTAssertEqual(ChordRecognizer.diatonicChords(forKey: (.g, true)), [
+            Chord(root: .g, quality: .major), Chord(root: .a, quality: .minor),
+            Chord(root: .b, quality: .minor), Chord(root: .c, quality: .major),
+            Chord(root: .d, quality: .major), Chord(root: .e, quality: .minor),
+        ])
+    }
 }
