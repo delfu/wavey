@@ -51,4 +51,13 @@ final class ChordRecognizerTests: XCTestCase {
         // start should land exactly on one of the provided beats
         XCTAssertTrue(beats.contains { abs($0 - (start ?? -1)) < 1e-9 })
     }
+
+    func testAbsorbsShortBlip() {
+        let recognizer = ChordRecognizer(sampleRate: sr)
+        let signal = tone([261.63, 329.63, 392.00], 1.0)   // C major
+            + tone([369.99, 466.16, 554.37], 0.2)          // F# major — 0.2s blip
+            + tone([261.63, 329.63, 392.00], 1.0)          // C major
+        // the brief F# is shorter than minChordDuration → absorbed into its C neighbours.
+        XCTAssertEqual(recognizer.recognize(signal).map(\.chord), [Chord(root: .c, quality: .major)])
+    }
 }

@@ -33,8 +33,8 @@ public struct ChordRecognizer {
     public init(sampleRate: Double = 44_100,
                 fftSize: Int = 4096,
                 hop: Int = 2048,
-                minChordDuration: Double = 0.3,
-                smoothingFrames: Int = 7,
+                minChordDuration: Double = 0.5,
+                smoothingFrames: Int = 9,
                 matchThreshold: Double = 0.6,
                 qualities: [ChordQuality] = [.major, .minor]) {
         self.sampleRate = sampleRate
@@ -51,9 +51,11 @@ public struct ChordRecognizer {
         let frames = chromaFrames(samples)
         guard !frames.isEmpty else { return [] }
         let templates = buildTemplates()
-        let labels = modeSmooth(frames.map { bestChord($0, templates: templates) },
-                                window: smoothingFrames)
-        let result = segments(labels, hopTime: Double(hop) / sampleRate)
+        let hopTime = Double(hop) / sampleRate
+        let smoothed = modeSmooth(frames.map { bestChord($0, templates: templates) },
+                                  window: smoothingFrames)
+        let cleaned = enforceMinRun(smoothed, minFrames: max(1, Int(minChordDuration / hopTime)))
+        let result = segments(cleaned, hopTime: hopTime)
         return beats.map { snap(result, to: $0) } ?? result
     }
 
@@ -121,6 +123,39 @@ public struct ChordRecognizer {
             }
             return counts.max { $0.value < $1.value }!.key
         }
+    }
+
+    /// Absorb runs shorter than `minFrames` into the longer adjacent run, so short
+    /// spurious chords (and brief no-chord gaps) disappear without leaving holes.
+    private func enforceMinRun(_ input: [Chord?], minFrames: Int) -> [Chord?] {
+        guard minFrames > 1 else { return input }
+        var labels = input
+        while true {
+            let runs = runLengths(labels)
+            guard runs.count > 1 else { break }
+            guard let shortIndex = runs.indices
+                .filter({ runs[$0].range.count < minFrames })
+                .min(by: { runs[$0].range.count < runs[$1].range.count })
+            else { break }
+
+            let prevLength = shortIndex > 0 ? runs[shortIndex - 1].range.count : -1
+            let nextLength = shortIndex < runs.count - 1 ? runs[shortIndex + 1].range.count : -1
+            let neighbor = prevLength >= nextLength ? runs[shortIndex - 1].label : runs[shortIndex + 1].label
+            for k in runs[shortIndex].range { labels[k] = neighbor }
+        }
+        return labels
+    }
+
+    private func runLengths(_ labels: [Chord?]) -> [(range: Range<Int>, label: Chord?)] {
+        var runs: [(Range<Int>, Chord?)] = []
+        var i = 0
+        while i < labels.count {
+            var j = i
+            while j < labels.count, labels[j] == labels[i] { j += 1 }
+            runs.append((i..<j, labels[i]))
+            i = j
+        }
+        return runs
     }
 
     private func segments(_ labels: [Chord?], hopTime: Double) -> [TimedChord] {
