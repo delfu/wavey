@@ -1,12 +1,20 @@
 name: Wavey
 options:
-  bundleIdPrefix: com.delongfu
+  bundleIdPrefix: com.zaftco
   deploymentTarget:
     iOS: "17.0"
   createIntermediateGroups: true
 packages:
   WaveyEngine:
     path: Engine
+settings:
+  base:
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: DCPE232A7E
+    ENABLE_DEBUG_DYLIB: "NO"
 targets:
   Wavey:
     type: application
@@ -19,7 +27,7 @@ targets:
     settings:
       base:
         GENERATE_INFOPLIST_FILE: "YES"
-        PRODUCT_BUNDLE_IDENTIFIER: com.delongfu.wavey
+        PRODUCT_BUNDLE_IDENTIFIER: com.zaftco.wavey
         MARKETING_VERSION: "0.1.0"
         CURRENT_PROJECT_VERSION: "1"
         SWIFT_VERSION: "5.0"
