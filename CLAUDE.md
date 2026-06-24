@@ -75,3 +75,11 @@ xcodebuild -scheme Wavey -destination 'platform=iOS Simulator,name=iPhone 17' te
 - **Engine changes ship with tests.** DSP/theory/match logic is verified against synthesized signals and labeled audio fixtures in `Fixtures/`. ML runners get integration tests against known clips (tolerance-based, not exact-match).
 - **The app stays thin.** If you find yourself writing signal logic in a SwiftUI view, it belongs in the engine.
 - **Sheets are JSON** conforming to the `Sheet` model; hand-authored sheets (M3) and pipeline-generated sheets (M4+) share one format.
+
+## Commit messages
+
+Use the global format (`[scope] type: subject` + a why-focused body), and **always end the message with a `Test Plan` section** — a few concrete steps someone can follow to verify what this commit changed: the exact command(s) to run, and/or the manual checks for UI work. Engine commits cite the relevant `swift test --filter …`; app commits give the build + simulator/on-device steps. For pure docs/config changes, a one-line "docs only" check is fine.
+
+    Test Plan:
+    - cd Engine && swift test --filter TheoryTests
+    - 9 cases pass: MIDI/frequency/cents round-trips, chord pitch classes, tuning.
