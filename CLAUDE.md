@@ -52,6 +52,7 @@ audio file → `Separation` (Demucs Core ML → guitar stem) → `BeatTracker` (
 - **Chords before notes.** v1 ingestion yields chord progressions; polyphonic note transcription (Spotify **Basic Pitch**) is the M5 stretch.
 - **Acoustic only.** Pitch/chroma parameters are tuned for acoustic-guitar timbre and range.
 - **iOS 17+, Swift + SwiftUI.** Accelerate (vDSP) for DSP, Core ML for models, XCTest for the engine.
+- **We build the DSP + music-theory layer; we buy the ML models.** A 2026-06 build-vs-buy review found no permissive option for the analysis layer — the strong MIR libraries (aubio, Essentia, Chordino) are GPL/AGPL (unusable in a closed-source app) and there is no permissively-licensed Swift chromagram or chord-from-audio library at all — so capture, pitch, tuner, FFT, chromagram, onset, beat, and chord recognition are hand-built on Accelerate. The ML pieces are bought: **Basic Pitch** (Apache-2.0; ships a Core ML model) for note transcription and **Demucs htdemucs_6s** (MIT) for separation — the latter gated on an on-device guitar-quality spike (see Linear DEL-199).
 
 ## Commands
 
