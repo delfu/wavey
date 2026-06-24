@@ -33,6 +33,7 @@ targets:
         SWIFT_VERSION: "5.0"
         TARGETED_DEVICE_FAMILY: "1"
         INFOPLIST_KEY_UILaunchScreen_Generation: "YES"
+        INFOPLIST_KEY_NSMicrophoneUsageDescription: "Wavey listens to your guitar through the microphone to tune it and follow along as you play."
 schemes:
   Wavey:
     build:

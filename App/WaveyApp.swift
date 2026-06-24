@@ -4,7 +4,7 @@ import SwiftUI
 struct WaveyApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
         }
     }
 }
