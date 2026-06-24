@@ -1,29 +1,46 @@
 import SwiftUI
 
-/// Root navigation: the three top-level destinations. Library and Game are
-/// placeholders until M3.
+/// Root navigation: Tuner / Songs / Play. Songs and Play are placeholders until
+/// their screens are built. Tangerine accent per the Warm Daylight design.
 struct RootView: View {
     var body: some View {
         TabView {
             TunerView()
-                .tabItem { Label("Tuner", systemImage: "tuningfork") }
-            PlaceholderView(title: "Songs", subtitle: "Your sheets will live here.")
-                .tabItem { Label("Songs", systemImage: "music.note.list") }
-            PlaceholderView(title: "Play", subtitle: "Play-along game coming in M3.")
-                .tabItem { Label("Play", systemImage: "guitars") }
+                .tabItem { Label("Tuner", systemImage: "gauge.medium") }
+            PlaceholderView(title: "Songs",
+                            subtitle: "Your sheets will live here.",
+                            systemImage: "music.note.list")
+                .tabItem { Label("Songs", systemImage: "music.note") }
+            PlaceholderView(title: "Play",
+                            subtitle: "Play-along game coming soon.",
+                            systemImage: "guitars.fill")
+                .tabItem { Label("Play", systemImage: "guitars.fill") }
         }
+        .tint(Theme.primary)
     }
 }
 
 private struct PlaceholderView: View {
     let title: String
     let subtitle: String
+    let systemImage: String
+
     var body: some View {
-        VStack(spacing: 8) {
-            Text(title).font(.largeTitle.bold())
-            Text(subtitle).foregroundStyle(.secondary)
+        ZStack {
+            Theme.paper.ignoresSafeArea()
+            VStack(spacing: 12) {
+                Image(systemName: systemImage)
+                    .font(.system(size: 40))
+                    .foregroundStyle(Theme.textTertiary)
+                Text(title)
+                    .font(.system(size: 28, weight: .bold))
+                    .foregroundStyle(Theme.ink)
+                Text(subtitle)
+                    .font(.system(size: 15))
+                    .foregroundStyle(Theme.textSecond)
+            }
+            .padding()
         }
-        .padding()
     }
 }
 

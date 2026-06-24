@@ -13,6 +13,7 @@ final class TunerViewModel {
     private(set) var reading: TunerReading?
     private(set) var isListening = false
     private(set) var errorMessage: String?
+    private(set) var permissionDenied = false
 
     private let sampleRate = 44_100.0
     private let tuner = Tuner()
@@ -49,7 +50,9 @@ final class TunerViewModel {
             do {
                 try await capture.start()
                 isListening = true
+                permissionDenied = false
             } catch {
+                if case AudioCapture.CaptureError.permissionDenied = error { permissionDenied = true }
                 errorMessage = Self.message(for: error)
                 self.capture = nil
             }
