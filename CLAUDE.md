@@ -70,6 +70,12 @@ xcodebuild -scheme Wavey -destination 'generic/platform=iOS Simulator' build
 xcodebuild -scheme Wavey -destination 'platform=iOS Simulator,name=iPhone 17' test
 ```
 
+**Before each commit, run the local check** — engine tests + app build in one command. This is the verification gate until GitHub Actions is set up (deferred — DEL-180):
+
+```bash
+scripts/check.sh
+```
+
 ## Conventions
 
 - **Engine changes ship with tests.** DSP/theory/match logic is verified against synthesized signals and labeled audio fixtures in `Fixtures/`. ML runners get integration tests against known clips (tolerance-based, not exact-match).
