@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Xcode
+DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# XcodeGen-generated project — regenerate with `xcodegen generate`
+*.xcodeproj
+
+# Core ML model binaries are large; see DEL-199 for how they're produced/fetched
+Models/*.mlpackage
+Models/*.mlmodelc
