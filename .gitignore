@@ -17,3 +17,6 @@ xcuserdata/
 # Core ML model binaries are large; see DEL-199 for how they're produced/fetched
 Models/*.mlpackage
 Models/*.mlmodelc
+
+# Large audio (source songs + separated stems) — not committed
+Fixtures/audio/
