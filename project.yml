@@ -41,3 +41,4 @@ schemes:
         Wavey: all
     run:
       config: Debug
+      debugEnabled: false   # keep "Debug executable" unchecked across regenerations
